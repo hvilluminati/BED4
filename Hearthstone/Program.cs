@@ -20,6 +20,12 @@ builder.Services.AddSingleton<SetService>();
 
 builder.Services.AddControllers();
 
+builder.Host.ConfigureLogging(log =>
+{
+    log.ClearProviders();
+    log.AddConsole();
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

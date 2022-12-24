@@ -14,6 +14,12 @@ namespace Hearthstone.Services
             IMongoDatabase database = client.GetDatabase(mongoSettings.Value.DatabaseName);
             _rarityCollection = database.GetCollection<Rarity>(mongoSettings.Value.RarityCollectionName);
         }
+
+        public async Task<List<Rarity>> GetAsync()
+        {
+            return await _rarityCollection.Find(x => true).ToListAsync();
+        }
+
         public void CreateRarities()
         {
             foreach (var path in new[] { "metadata.json" })

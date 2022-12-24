@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Hearthstone.Services;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Hearthstone.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,11 +19,17 @@ namespace Hearthstone.Controllers
             _logger = logger;
         }
 
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        public async Task<ActionResult<CardType>> GetClasses()
         {
-            return "value";
+            _logger.LogInformation("Get all classes");
+
+            var classType = await _classService.GetAsync();
+
+            if (classType == null)
+                return NotFound();
+
+            return Ok(classType);
         }
 
         [HttpPost]

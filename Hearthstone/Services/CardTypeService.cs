@@ -14,6 +14,12 @@ namespace Hearthstone.Services
             IMongoDatabase database = client.GetDatabase(mongoSettings.Value.DatabaseName);
             _cardTypeCollection = database.GetCollection<CardType>(mongoSettings.Value.CardTypeCollectionName);
         }
+
+        public async Task<List<CardType>> GetAsync()
+        {
+            return await _cardTypeCollection.Find(x => true).ToListAsync();
+        }
+
         public void CreateCardTypes()
         {
             foreach (var path in new[] { "metadata.json" })

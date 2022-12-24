@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Hearthstone.Services;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Hearthstone.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,11 +19,24 @@ namespace Hearthstone.Controllers
             _logger = logger;
         }
 
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CardWithMetaDataDTO>>> GetCardsAsync([FromQuery] QueryParameter queryParameter)
         {
-            return "value";
+            _logger.LogInformation(
+                $"page={queryParameter.page} " +
+                $"artist={queryParameter.artist} " +
+                $"rarirtyId={queryParameter.rarityid} " +
+                $"classId={queryParameter.classid} " +
+                $"setId={queryParameter.setid} ");
+
+            var result = await _cardService.GetCardsByQuery(queryParameter);
+
+            _logger.LogInformation($"EntityCount={result.Count} ");
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
 
         [HttpPost]

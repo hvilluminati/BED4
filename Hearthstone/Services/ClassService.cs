@@ -14,6 +14,12 @@ namespace Hearthstone.Services
             IMongoDatabase database = client.GetDatabase(mongoSettings.Value.DatabaseName);
             _classCollection = database.GetCollection<Class>(mongoSettings.Value.ClassCollectionName);
         }
+
+        public async Task<List<Class>> GetAsync()
+        {
+            return await _classCollection.Find(x => true).ToListAsync();
+        }
+
         public void CreateClasses()
         {
             foreach (var path in new[] { "metadata.json" })
